@@ -1,0 +1,43 @@
+name: Hourly Content Update
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  update-content:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # Fetches all history for all branches and tags
+    
+    - name: Fetch content from external link
+      run: |
+        curl -o videos.txt https://gentle-dream-6173.calvinduo.workers.dev/videos.txt
+    
+    - name: Check for changes
+      id: check_changes
+      run: |
+        if git diff --quiet videos.txt; then
+          echo "No changes detected"
+          echo "changes_detected=false" >> $GITHUB_OUTPUT
+        else
+          echo "Changes detected"
+          echo "changes_detected=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Commit and push if changed
+      if: steps.check_changes.outputs.changes_detected == 'true'
+      env:
+        GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
+        GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+      run: |
+        git config user.name "$GIT_USER_NAME"
+        git config user.email "$GIT_USER_EMAIL"
+        git add videos.txt
+        git commit -m "Auto update videos.txt from external link"
+        git push || (echo "Push failed, retrying..." && git pull --rebase && git push)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

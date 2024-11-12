@@ -1,0 +1,69 @@
+name: Update onlyINtv
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天运行一次
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  update-only-in-tv:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+        
+    - name: Download and process files
+      run: |
+        # 下载所需文件
+        curl -o fanza_tv.txt https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV.txt
+        curl -o fanza_tv_plus.txt https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV_Plus.txt
+        curl -o premium.txt https://raw.githubusercontent.com/CPCOM/isMonthly/main/Fanza/PREMIUM.txt
+        
+        # 创建 Python 脚本进行处理
+        cat << 'EOF' > process.py
+        def read_file(filename):
+            try:
+                with open(filename, 'r') as f:
+                    return set(line.strip() for line in f if line.strip())
+            except:
+                return set()
+
+        # 读取文件
+        tv_codes = read_file('fanza_tv.txt')
+        tv_plus_codes = read_file('fanza_tv_plus.txt')
+        premium_codes = read_file('premium.txt')
+
+        # 合并 TV 和 TV Plus 的代码
+        all_tv_codes = tv_codes.union(tv_plus_codes)
+
+        # 找出只在 TV 中存在的代码
+        only_in_tv = all_tv_codes - premium_codes
+
+        # 保存结果
+        with open('onlyINtv.txt', 'w') as f:
+            for code in sorted(only_in_tv):
+                f.write(f'{code}\n')
+        EOF
+        
+        # 运行 Python 脚本
+        python process.py
+        
+    - name: Check for changes
+      id: check_changes
+      run: |
+        git add onlyINtv.txt
+        git diff --cached --quiet || echo "::set-output name=changes_detected::true"
+        
+    - name: Commit and push if changes exist
+      if: steps.check_changes.outputs.changes_detected == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "Update onlyINtv.txt"
+        git push

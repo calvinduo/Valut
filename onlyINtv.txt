@@ -3543,8 +3543,6 @@ avhd103
 avhd104
 avhd105
 avkh00136
-avkh00138
-avkh00139
 avkh00140
 avkh00141
 avkh00142
@@ -3683,8 +3681,6 @@ avte017
 avte018
 avte019
 avte020
-avzg00036
-avzg00037
 avzg00038
 avzg00039
 avzg00040
@@ -7337,6 +7333,7 @@ h_1758ggdr00007
 h_1758ggdr00008
 h_1758ggdr00009
 h_1758ggdr00010
+h_1758ggdr00012
 h_180rks00039
 h_180rks00092
 h_180rks00122
@@ -11457,8 +11454,6 @@ lsvk00008
 lsvk00013re01
 lsvk00015
 mdte00010
-mdud00431
-mdud00432
 mdud00435
 mdud00437
 mdud00438
@@ -11944,6 +11939,7 @@ oksm041
 oksm042
 oksm043
 oksm044
+oksm045
 oprn00002
 oprn00005
 oprn00006
@@ -13692,6 +13688,7 @@ ssk147
 ssk148
 ssk149
 ssk150
+ssk151
 stbs001
 stbs002
 stbs003

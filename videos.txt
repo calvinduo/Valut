@@ -17,11 +17,11 @@
         "domain": "googleapis.com",
         "metadata": {
           "quota_limit_value": "420000",
-          "quota_metric": "drive.googleapis.com/default",
-          "service": "drive.googleapis.com",
           "quota_limit": "defaultPerMinutePerProject",
           "quota_location": "global",
-          "consumer": "projects/202264815644"
+          "consumer": "projects/202264815644",
+          "service": "drive.googleapis.com",
+          "quota_metric": "drive.googleapis.com/default"
         }
       },
       {

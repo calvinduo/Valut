@@ -12023,6 +12023,7 @@ shinki134
 shinki135
 shinki136
 shinki137
+shinki138
 sijm001
 sijm002
 sijm003
@@ -13651,6 +13652,7 @@ stbs012
 stbs013
 stbs014
 stbs015
+stbs016
 stgj002
 tken00002
 tken00003

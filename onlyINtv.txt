@@ -6,8 +6,6 @@
 100tv00339
 100tv00349
 100tv00350
-100tv00359
-100tv00360
 100tv00361
 100tv00362
 100tv00365
@@ -12300,6 +12298,7 @@ simm432
 simm433
 simm434
 simm435
+simm436
 simm437
 simm438
 simm439
@@ -12609,7 +12608,6 @@ smmc108
 smmc109
 smmc110
 smmc111
-smmc112
 smmc113
 smmc114
 smmc115
@@ -13279,6 +13277,8 @@ spay411
 spay412
 spay413
 spay417
+spay419
+spay420
 srmm001
 srmm002
 srmm003

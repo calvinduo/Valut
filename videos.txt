@@ -16,13 +16,13 @@
         "reason": "RATE_LIMIT_EXCEEDED",
         "domain": "googleapis.com",
         "metadata": {
+          "service": "drive.googleapis.com",
+          "consumer": "projects/202264815644",
+          "quota_metric": "drive.googleapis.com/default",
           "quota_location": "global",
           "quota_limit_value": "420000",
-          "consumer": "projects/202264815644",
-          "quota_unit": "1/min/{project}",
           "quota_limit": "defaultPerMinutePerProject",
-          "service": "drive.googleapis.com",
-          "quota_metric": "drive.googleapis.com/default"
+          "quota_unit": "1/min/{project}"
         }
       },
       {

@@ -1,73 +1,129 @@
-name: Hourly Content Update
+# .github/workflows/update-lists.yml
 
+name: '自动更新和比较列表'
+
+# 工作流触发条件
 on:
+  # 允许在 GitHub Actions 页面手动触发此工作流
+  workflow_dispatch:
+
+  # 设置定时任务，使用 Cron 语法
+  # 这里的 '30 18 * * *' 表示在每天的 UTC 时间 18:30 运行
+  # 这对应于北京/香港/台北时间的凌晨 02:30
+  # 你可以根据需要调整时间
   schedule:
-    - cron: '0 * * * *'  # Runs every hour
-  workflow_dispatch:      # Allows manual triggering
+    - cron: '30 18 * * *'
 
 jobs:
-  update-content:
+  update-files:
+    # 使用最新的 Ubuntu 虚拟环境来运行任务
     runs-on: ubuntu-latest
-    permissions:
-      contents: write    # Explicitly set permissions for repo operations
-    
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4    # Using latest version
+      # 第一步：检出（Checkout）你的仓库代码
+      # 这样工作流才能访问和修改你的仓库文件
+      - name: '检出仓库代码'
+        uses: actions/checkout@v4
+
+      # 第二步：运行核心处理脚本
+      # 我们将所有逻辑都放在这个 Python 脚本中
+      - name: '下载、比较并生成文件'
+        # 使用 shell 来执行一段 Python 代码
+        run: |
+          python - <<'EOF'
+          import requests
+          import os
+
+          # --- 配置区域 ---
+          # 定义要下载的文件的 URL
+          urls = {
+              "PREMIUM": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/Fanza/PREMIUM.txt",
+              "STANDARD": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/Fanza/STANDARD.txt",
+              "FANZA_TV": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV.txt",
+              "FANZA_TV_Plus": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV_Plus.txt"
+          }
+
+          # 存储下载内容的字典
+          content = {}
+
+          # --- 函数定义 ---
+          def download_and_validate(name, url):
+              """下载文件并进行基础验证"""
+              print(f"正在下载 {name} 从 {url}...")
+              try:
+                  # 设置超时以防止任务卡死
+                  response = requests.get(url, timeout=60)
+                  
+                  # 关键验证：检查 HTTP 状态码是否为 200 (成功)
+                  if response.status_code != 200:
+                      print(f"错误：下载 {name} 失败，HTTP 状态码：{response.status_code}")
+                      # 退出脚本并返回错误码，这将导致整个工作流失败
+                      exit(1)
+                  
+                  # 关键验证：检查内容是否为空
+                  if not response.text.strip():
+                      print(f"错误：下载的 {name} 文件内容为空。")
+                      exit(1)
+
+                  print(f"{name} 下载成功，内容有效。")
+                  # 将文本按行分割并去除空行
+                  return {line.strip() for line in response.text.strip().split('\n') if line.strip()}
+              
+              except requests.exceptions.RequestException as e:
+                  print(f"错误：下载 {name} 时发生网络异常：{e}")
+                  exit(1)
+
+          # --- 主逻辑 ---
+          # 下载所有文件
+          for name, url in urls.items():
+              content[name] = download_and_validate(name, url)
+
+          # 获取 PREMIUM 列表作为基准
+          premium_set = content.get("PREMIUM", set())
+          if not premium_set:
+              print("错误：PREMIUM 列表为空，无法进行比较。")
+              exit(1)
+
+          # 定义要处理和生成的任务
+          tasks = {
+              "STANDARD": "STANDARD_only.txt",
+              "FANZA_TV": "FANZA_TV_only.txt",
+              "FANZA_TV_Plus": "FANZA_TV_Plus_only.txt"
+          }
+
+          # 循环处理每个任务
+          for source_name, output_filename in tasks.items():
+              print(f"正在处理 {source_name}...")
+              
+              source_set = content.get(source_name, set())
+              
+              # 核心比较逻辑：找出差集
+              # 找出在 source_set 中但不在 premium_set 中的元素
+              result_set = source_set - premium_set
+              
+              # 按字母顺序排序结果，以保证每次生成的文件内容顺序一致
+              sorted_result = sorted(list(result_set))
+              
+              print(f"为 {source_name} 找到了 {len(sorted_result)} 个独有条目。正在写入 {output_filename}...")
+              
+              # 将结果写入文件
+              with open(output_filename, 'w', encoding='utf-8') as f:
+                  # 使用 '\n' 作为换行符，这是 Unix/Linux 的标准
+                  f.write('\n'.join(sorted_result))
+              
+              print(f"{output_filename} 已成功生成。")
+
+          print("\n所有任务处理完毕！")
+          EOF
+
+      # 第三步：自动提交和推送更改
+      # 这个 action 会检查工作区是否有文件变动（新增/修改）
+      # 如果有，它会自动创建一个 commit 并推送到你的仓库
+      # 如果没有变动，它什么也不会做
+      - name: '提交并推送文件'
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          fetch-depth: 1             # Only fetch the latest commit to speed up
-      
-      - name: Create download directory
-        run: mkdir -p downloads
-      
-      - name: Download content
-        run: |
-          curl -L -o downloads/videos.txt https://gentle-dream-6173.calvinduo.workers.dev/videos.txt
-          if [ $? -ne 0 ]; then
-            echo "Failed to download content"
-            exit 1
-          fi
-      
-      - name: Check if content is different
-        id: check_changes
-        run: |
-          if [ ! -f videos.txt ]; then
-            echo "First time download"
-            cp downloads/videos.txt videos.txt
-            echo "changes_detected=true" >> $GITHUB_OUTPUT
-          elif ! cmp -s downloads/videos.txt videos.txt; then
-            echo "Changes detected"
-            cp downloads/videos.txt videos.txt
-            echo "changes_detected=true" >> $GITHUB_OUTPUT
-          else
-            echo "No changes detected"
-            echo "changes_detected=false" >> $GITHUB_OUTPUT
-          fi
-      
-      - name: Commit and push if changed
-        if: steps.check_changes.outputs.changes_detected == 'true'
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add videos.txt
-          git commit -m "Auto update videos.txt [skip ci]"
-          
-          # Try to push changes with retry logic
-          max_retries=3
-          retry_count=0
-          
-          while [ $retry_count -lt $max_retries ]; do
-            if git push; then
-              echo "Successfully pushed changes"
-              break
-            else
-              retry_count=$((retry_count + 1))
-              if [ $retry_count -eq $max_retries ]; then
-                echo "Failed to push after $max_retries attempts"
-                exit 1
-              fi
-              echo "Push failed, attempt $retry_count of $max_retries. Retrying..."
-              git pull --rebase
-              sleep 5
-            fi
-          done
+          # 自定义 commit 消息
+          commit_message: '自动化: 更新列表文件'
+          # 指定 commit 的作者信息
+          commit_author: 'GitHub Actions <actions@github.com>'

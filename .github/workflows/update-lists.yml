@@ -40,7 +40,10 @@ jobs:
               "PREMIUM": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/Fanza/PREMIUM.txt",
               "STANDARD": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/Fanza/STANDARD.txt",
               "FANZA_TV": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV.txt",
-              "FANZA_TV_Plus": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV_Plus.txt"
+              "FANZA_TV_Plus": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV_Plus.txt",
+              # 新增的 URL
+              "HLS": "https://gentle-dream-6173.calvinduo.workers.dev/ikoa_dmf_hls_list.txt",
+              "DASH": "https://gentle-dream-6173.calvinduo.workers.dev/notMonthly.txt"
           }
 
           # 存储下载内容的字典
@@ -88,7 +91,10 @@ jobs:
           tasks = {
               "STANDARD": "STANDARD_only.txt",
               "FANZA_TV": "FANZA_TV_only.txt",
-              "FANZA_TV_Plus": "FANZA_TV_Plus_only.txt"
+              "FANZA_TV_Plus": "FANZA_TV_Plus_only.txt",
+              # 新增的任务
+              "HLS": "hls_only.txt",
+              "DASH": "dash_only.txt"
           }
 
           # 循环处理每个任务

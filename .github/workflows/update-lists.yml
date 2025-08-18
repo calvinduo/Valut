@@ -41,15 +41,17 @@ jobs:
               "STANDARD": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/Fanza/STANDARD.txt",
               "FANZA_TV": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV.txt",
               "FANZA_TV_Plus": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV_Plus.txt",
-              "HLS": "https://gentle-dream-6173.calvinduo.workers.dev/ikoa_dmf_hls_list.txt",
-              "DASH": "https://gentle-dream-6173.calvinduo.workers.dev/notMonthly.txt"
+              # --- (修改点) 更新为 Google Drive 链接 ---
+              "HLS": "https://drive.google.com/uc?export=download&id=1Wm0Iml1HolBNUslgPTfnwYcdC-Kd0Ojy",
+              "DASH": "https://drive.google.com/uc?export=download&id=1AbHGLW3Nh8OaPBLgVY06MiKO4xKXbSx0"
           }
 
-          # --- (修改点 1) 新增：定义需要直接下载保存的文件的 URL ---
+          # 定义需要直接下载保存的文件的 URL
           direct_download_urls = {
-              "videos.txt": "https://gentle-dream-6173.calvinduo.workers.dev/videos.txt",
-              "videos_4k.txt": "https://gentle-dream-6173.calvinduo.workers.dev/videos_4k.txt",
-              "dmmtv_vault.txt": "https://gentle-dream-6173.calvinduo.workers.dev/dmmtv_vault.txt"
+              # --- (修改点) 更新为 Google Drive 链接 ---
+              "videos.txt": "https://drive.google.com/uc?export=download&id=1Leyymxvw1uoRrwXT8ZwMeSUI0kkW1Cix",
+              "videos_4k.txt": "https://drive.google.com/uc?export=download&id=1-9eShROt9qsPNvxMKSx71pNywgnVfIik",
+              "dmmtv_vault.txt": "https://drive.google.com/uc?export=download&id=1heZE17N1Nxp2YwYtbo0JoBbRDy9ODuay"
           }
 
           # 存储下载内容的字典
@@ -123,7 +125,7 @@ jobs:
               
               print(f"{output_filename} 已成功生成。")
           
-          # --- (修改点 2) 新增逻辑：处理直接下载的任务 ---
+          # 新增逻辑：处理直接下载的任务
           print("\n--- 开始处理直接下载任务 ---")
           for output_filename, url in direct_download_urls.items():
               # 直接使用 download_and_validate 函数下载内容

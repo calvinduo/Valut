@@ -35,15 +35,21 @@ jobs:
           import os
 
           # --- 配置区域 ---
-          # 定义要下载的文件的 URL
-          urls = {
+          # 定义需要进行比较的文件的 URL
+          comparison_urls = {
               "PREMIUM": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/Fanza/PREMIUM.txt",
               "STANDARD": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/Fanza/STANDARD.txt",
               "FANZA_TV": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV.txt",
               "FANZA_TV_Plus": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV_Plus.txt",
-              # 新增的 URL
               "HLS": "https://gentle-dream-6173.calvinduo.workers.dev/ikoa_dmf_hls_list.txt",
               "DASH": "https://gentle-dream-6173.calvinduo.workers.dev/notMonthly.txt"
+          }
+
+          # --- (修改点 1) 新增：定义需要直接下载保存的文件的 URL ---
+          direct_download_urls = {
+              "videos.txt": "https://gentle-dream-6173.calvinduo.workers.dev/videos.txt",
+              "videos_4k.txt": "https://gentle-dream-6173.calvinduo.workers.dev/videos_4k.txt",
+              "dmmtv_vault.txt": "https://gentle-dream-6173.calvinduo.workers.dev/dmmtv_vault.txt"
           }
 
           # 存储下载内容的字典
@@ -77,8 +83,9 @@ jobs:
                   exit(1)
 
           # --- 主逻辑 ---
-          # 下载所有文件
-          for name, url in urls.items():
+          # 1. 处理需要比较的文件
+          print("--- 开始处理需要比较的文件 ---")
+          for name, url in comparison_urls.items():
               content[name] = download_and_validate(name, url)
 
           # 获取 PREMIUM 列表作为基准
@@ -87,37 +94,52 @@ jobs:
               print("错误：PREMIUM 列表为空，无法进行比较。")
               exit(1)
 
-          # 定义要处理和生成的任务
-          tasks = {
+          # 定义要处理和生成的比较任务
+          comparison_tasks = {
               "STANDARD": "STANDARD_only.txt",
               "FANZA_TV": "FANZA_TV_only.txt",
               "FANZA_TV_Plus": "FANZA_TV_Plus_only.txt",
-              # 新增的任务
               "HLS": "hls_only.txt",
               "DASH": "dash_only.txt"
           }
 
-          # 循环处理每个任务
-          for source_name, output_filename in tasks.items():
+          # 循环处理每个比较任务
+          for source_name, output_filename in comparison_tasks.items():
               print(f"正在处理 {source_name}...")
               
               source_set = content.get(source_name, set())
               
               # 核心比较逻辑：找出差集
-              # 找出在 source_set 中但不在 premium_set 中的元素
               result_set = source_set - premium_set
               
-              # 按字母顺序排序结果，以保证每次生成的文件内容顺序一致
+              # 按字母顺序排序结果
               sorted_result = sorted(list(result_set))
               
               print(f"为 {source_name} 找到了 {len(sorted_result)} 个独有条目。正在写入 {output_filename}...")
               
               # 将结果写入文件
               with open(output_filename, 'w', encoding='utf-8') as f:
-                  # 使用 '\n' 作为换行符，这是 Unix/Linux 的标准
                   f.write('\n'.join(sorted_result))
               
               print(f"{output_filename} 已成功生成。")
+          
+          # --- (修改点 2) 新增逻辑：处理直接下载的任务 ---
+          print("\n--- 开始处理直接下载任务 ---")
+          for output_filename, url in direct_download_urls.items():
+              # 直接使用 download_and_validate 函数下载内容
+              direct_content_set = download_and_validate(output_filename, url)
+              
+              # 排序以确保文件内容一致性
+              sorted_content = sorted(list(direct_content_set))
+              
+              print(f"为 {output_filename} 下载了 {len(sorted_content)} 个条目。正在写入文件...")
+              
+              # 将排序后的内容直接写入同名文件
+              with open(output_filename, 'w', encoding='utf-8') as f:
+                  f.write('\n'.join(sorted_content))
+                  
+              print(f"{output_filename} 已成功生成。")
+
 
           print("\n所有任务处理完毕！")
           EOF

@@ -13194,6 +13194,8 @@ oru00006
 oru00008
 otms00001
 oyst00001
+panpi025
+panpi027
 parathd03091
 pcde00012
 pcde00013

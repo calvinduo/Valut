@@ -51,7 +51,10 @@ apns00374
 apns00375
 bokd00303
 bouz001
+buz056
 cosx00085
+deas008
+deas009
 dpdx009
 ekdv00779
 ekdv00780
@@ -107,6 +110,7 @@ luns00212
 luns00213
 madv00587
 mdbk00370
+mkck00196
 mkmp00637
 mkmp00638
 mkmp00639
@@ -126,6 +130,8 @@ saba00941
 saba00942
 scop00875
 scpx00528
+smjs132
+smuk264
 stime039
 stime041
 stime042

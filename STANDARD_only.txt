@@ -59,6 +59,7 @@ dpdx009
 ekdv00779
 ekdv00780
 enki00083
+fuyu164
 gaga006
 gbcr00013
 gbcr00014
@@ -76,6 +77,7 @@ h_1600ukh00056
 h_1600ukh00057
 h_1600ukh00059
 h_1604pjab00010
+h_1604pjab00013
 h_1604pjam00026
 h_1604pjam00027
 h_1604pjam00028
@@ -110,7 +112,6 @@ luns00212
 luns00213
 madv00587
 mdbk00370
-mkck00196
 mkmp00637
 mkmp00638
 mkmp00639
@@ -131,6 +132,7 @@ saba00942
 scop00875
 scpx00528
 smjs132
+smjx046
 smuk264
 stime039
 stime041

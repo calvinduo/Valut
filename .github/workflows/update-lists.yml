@@ -39,7 +39,7 @@ jobs:
           comparison_urls = {
               "PREMIUM": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/Fanza/PREMIUM.txt",
               "STANDARD": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/Fanza/STANDARD.txt",
-              #"FANZA_TV": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV.txt",
+              "FANZA_TV": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV_Plus.txt",
               "FANZA_TV_Plus": "https://raw.githubusercontent.com/CPCOM/isMonthly/main/FANZATV/FANZA_TV_Plus.txt",
               # --- (修改点) 更新为 Google Drive 链接 ---
               "HLS": "https://drive.google.com/uc?export=download&id=1Wm0Iml1HolBNUslgPTfnwYcdC-Kd0Ojy",

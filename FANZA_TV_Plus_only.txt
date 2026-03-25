@@ -1722,7 +1722,6 @@ h_1251dfsmbrab00005
 h_1251dfsmbrab00007
 h_1251dfsmbrab00012
 h_1251dfsmbrab00013
-h_1251dfsmmr00298
 h_1251dfsmmr00367
 h_1251dfsmmr00376
 h_1251dfsmmr00377
@@ -3081,7 +3080,6 @@ hamedai087
 hamedai088
 hamedai090
 herl00009
-hmix00043
 hmix00044
 hmix00045
 hmix00046
@@ -3095,12 +3093,10 @@ ipc00019
 jdg0001
 jknk00121
 joyg00025
-jsop00048
 jsop00049
 jsop00050
 jsop00051
 jsop00052
-jue00019
 jzt004
 kcda00306
 kckc00207
@@ -3306,7 +3302,6 @@ khy212
 khy213
 khy214
 khy215
-knd00028
 koch00001
 koch00002
 koch00003
@@ -3449,8 +3444,6 @@ nash00761jo01
 nash00892jo01
 nass00614jo01
 nass00909jo01
-newm00103
-newm00104
 newm00105
 newm00106
 newm00107

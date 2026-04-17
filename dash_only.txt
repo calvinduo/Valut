@@ -1335,6 +1335,7 @@
 1nhdtb00416
 1nhdtb00475
 1nhdtb00512
+1nhdtb00518
 1nhdtb00722a
 1nhdtb00733a
 1nhdtb01711
@@ -2917,6 +2918,9 @@ dvdms00469
 dvdms00474
 dvdms00503
 dvdms00509
+dvdms00575
+dvdms00610
+dvdms00649
 dvdms00687
 dvlb00003
 dym00040

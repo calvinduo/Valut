@@ -213,7 +213,6 @@ newm00108
 nsfs00384
 nsfs00385
 ntsu00180
-ofje00512
 okax00995
 pai022
 pets00052
@@ -237,18 +236,6 @@ smjs132
 smjx046
 smuk261
 smuk264
-sone00564
-sone00721
-sone00723
-sone00725
-sone00726
-sone00732
-sone00734
-sone00737
-sone00762
-sone00771
-sone00777
-sone00783
 srom146
 stime039
 stime041

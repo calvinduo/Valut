@@ -27,6 +27,8 @@
 1nhdtc04801
 1nhdtc04901
 1nhdtc04904
+1nhdtc05201
+1nhdtc05202
 1nhdtc05502
 1nhdtc06602
 1nhdtc06603
